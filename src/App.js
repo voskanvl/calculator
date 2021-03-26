@@ -4,10 +4,13 @@ import "./App.scss";
 import DigitButton from "./components/digitButton";
 import { useState, useRef } from "react";
 
-const digitLabels = new Array(10).fill(null).map((_, i) => i);
-const operators = ["+", "-", "*", "/", "(", ")", "C"];
-digitLabels.push(".", ...operators);
-const controls = ["<", "<-", ">"];
+const digitLabels = [];
+const digits = new Array(10).fill(null).map((_, i) => i);
+digits.push(".");
+digitLabels.push(...digits);
+const operators = ["+", "-", "*", "/", "(", ")"];
+digitLabels.push(...operators);
+const controls = ["<", "<-", ">", "C"];
 digitLabels.push(...controls);
 
 const App = () => {
@@ -20,13 +23,45 @@ const App = () => {
         return !regexp.test(char);
     };
 
-    const handlerCb = x => {
+    const handlerReducer = x => {
+        const currentPosition = inp.current.selectionStart;
+        const divide = output.slice(currentPosition);
+
         if (x === "C") {
             setOutput("");
             return;
         }
-        const currentPosition = inp.current.selectionStart;
-        const divide = output.slice(currentPosition);
+        if (controls.includes(x)) {
+            switch (x) {
+                case "<":
+                    inp.current.selectionStart = inp.current.selectionEnd =
+                        currentPosition - 1;
+                    inp.current.focus();
+                    break;
+                case ">":
+                    inp.current.selectionStart = inp.current.selectionEnd =
+                        currentPosition + 1;
+                    inp.current.focus();
+                    break;
+                case "<-":
+                    if (currentPosition > 0) {
+                        setOutput(
+                            output.slice(0, currentPosition - 1) + divide,
+                        );
+                        inp.current.focus();
+                        setTimeout(() => {
+                            inp.current.selectionStart = inp.current.selectionEnd =
+                                currentPosition - 1;
+                        });
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            return;
+        }
+
         setOutput(output.slice(0, currentPosition) + x + divide);
         inp.current.focus();
         setTimeout(() => {
@@ -50,11 +85,16 @@ const App = () => {
     };
 
     const distributeDigitLabels = digitLabels.map(e => {
-        let color = /\d/.test(e) ? "black" : "red";
-        if (e === "C") color = "blue";
+        let color = digits.includes(e) ? "black" : "red";
         if (controls.includes(e)) color = "white";
+        if (e === "C") color = "blue";
         const element = (
-            <DigitButton color={color} label={e} cb={handlerCb} key={"i" + e} />
+            <DigitButton
+                color={color}
+                label={e}
+                cb={handlerReducer}
+                key={"i" + e}
+            />
         );
         return element;
     });
@@ -89,9 +129,8 @@ const App = () => {
                     )}
                 </div>
                 <div className="digits">
-                    {distributeDigitLabels.filter(
-                        ({ props: { label } }) =>
-                            /\d/.test(label) || /\./.test(label),
+                    {distributeDigitLabels.filter(({ props: { label } }) =>
+                        digits.includes(label),
                     )}
                 </div>
                 <div className="operators">
