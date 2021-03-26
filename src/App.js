@@ -4,20 +4,27 @@ import "./App.scss";
 import DigitButton from "./components/digitButton";
 import { useState, useRef } from "react";
 
-const arr = new Array(9).fill(null).map((_, i) => i);
-arr.push(".", "9", "+", "-", "*", "/", "(", ")");
+const digitLabels = new Array(10).fill(null).map((_, i) => i);
+const operators = ["+", "-", "*", "/", "(", ")", "C"];
+digitLabels.push(".", ...operators);
+const controls = ["<", "<-", ">"];
+digitLabels.push(...controls);
 
 const App = () => {
     const [output, setOutput] = useState("");
-    const [first, setFirst] = useState(true);
     const inp = useRef(null);
+    const equal = useRef(null);
 
     const validKey = char => {
-        const regexp = /[\d|.|*|\/|+|\-|\(|\)]/;
-        return regexp.test(char);
+        const regexp = /[^\d|.|*|/|+|\-|(|)]/;
+        return !regexp.test(char);
     };
 
     const handlerCb = x => {
+        if (x === "C") {
+            setOutput("");
+            return;
+        }
         const currentPosition = inp.current.selectionStart;
         const divide = output.slice(currentPosition);
         setOutput(output.slice(0, currentPosition) + x + divide);
@@ -28,29 +35,8 @@ const App = () => {
         });
     };
 
-    const handleBackspace = () => {
-        setOutput(output.slice(0, -1));
-    };
-    const handleKeyDown = e => {
-        e.preventDefault();
-        const { key } = e;
-        console.log(key, typeof key);
-        if (key === "Backspace") {
-            handleBackspace();
-            return;
-        }
-        if (validKey(key)) {
-            console.log("First", first);
-            setOutput(output + key);
-            if (first && key === "0") {
-                setOutput("0.");
-            }
-            setFirst(false);
-        }
-    };
-    const handleInput = e => {
-        setOutput(e.target.value);
-        console.log(e.target.selectionStart);
+    const handleInput = ({ target: { value } }) => {
+        if (validKey(value)) setOutput(value);
     };
 
     const postSet = () => {
@@ -63,45 +49,62 @@ const App = () => {
         }
     };
 
-    const handleKeyDown1 = e => {
-        console.log(e.target.selectionStart);
-    };
+    const distributeDigitLabels = digitLabels.map(e => {
+        let color = /\d/.test(e) ? "black" : "red";
+        if (e === "C") color = "blue";
+        if (controls.includes(e)) color = "white";
+        const element = (
+            <DigitButton color={color} label={e} cb={handlerCb} key={"i" + e} />
+        );
+        return element;
+    });
 
     return (
         <div className="main">
-            <div className="output">
-                <input
-                    ref={inp}
-                    type="text"
-                    placeholder="0"
-                    onKeyDown={handleKeyDown1}
-                    onInput={handleInput}
-                    value={output}
-                />
-                <div
-                    className="equal"
-                    onClick={() => {
-                        inp.current.focus();
-                        inp.current.selectionStart = inp.current.selectionEnd = 2;
-                    }}>
-                    ={postSet()}
+            <div className="wrap-output">
+                <div className="output">
+                    <input
+                        ref={inp}
+                        type="text"
+                        placeholder="0"
+                        onInput={handleInput}
+                        value={output}
+                    />
+                    <div
+                        ref={equal}
+                        className="equal"
+                        // style={{ fontSize: font }}
+                        onClick={() => {
+                            inp.current.focus();
+                            inp.current.selectionStart = inp.current.selectionEnd = 2;
+                        }}>
+                        ={postSet()}
+                    </div>
                 </div>
             </div>
             <div className="container">
-                {arr.map(e => {
-                    let color = /\d/.test(e) ? "black" : "red";
-                    return (
-                        <DigitButton
-                            color={color}
-                            label={e}
-                            cb={handlerCb}
-                            key={"i" + e}
-                        />
-                    );
-                })}
+                <div className="controls">
+                    {distributeDigitLabels.filter(({ props: { label } }) =>
+                        controls.includes(label),
+                    )}
+                </div>
+                <div className="digits">
+                    {distributeDigitLabels.filter(
+                        ({ props: { label } }) =>
+                            /\d/.test(label) || /\./.test(label),
+                    )}
+                </div>
+                <div className="operators">
+                    {distributeDigitLabels.filter(({ props: { label } }) =>
+                        operators.includes(label),
+                    )}
+                </div>
             </div>
         </div>
     );
 };
 
 export default App;
+
+//TODO: добавить кнопки перемещения по инпуту: вперед, назад, удалить
+//TODO: при использовании на мобильном вылезает клавиатура при фокусе на инпуте и закрывает цифры
