@@ -2,7 +2,7 @@
 
 import "./App.scss";
 import DigitButton from "./components/digitButton";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const digitLabels = [];
 const digits = new Array(10).fill(null).map((_, i) => i);
@@ -16,7 +16,8 @@ digitLabels.push(...controls);
 const App = () => {
     const [output, setOutput] = useState("");
     const inp = useRef(null);
-    const equal = useRef(null);
+
+    useEffect(() => inp.current.focus(), []);
 
     const validKey = char => {
         const regexp = /[^\d|.|*|/|+|\-|(|)]/;
@@ -109,17 +110,9 @@ const App = () => {
                         placeholder="0"
                         onInput={handleInput}
                         value={output}
+                        onBlur={() => inp.current.focus()}
                     />
-                    <div
-                        ref={equal}
-                        className="equal"
-                        // style={{ fontSize: font }}
-                        onClick={() => {
-                            inp.current.focus();
-                            inp.current.selectionStart = inp.current.selectionEnd = 2;
-                        }}>
-                        ={postSet()}
-                    </div>
+                    <div className="equal">={postSet()}</div>
                 </div>
             </div>
             <div className="container">
