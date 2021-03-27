@@ -27,12 +27,17 @@ export function reducer(output, action) {
                 };
             }
         case "<-":
-            return {
-                value:
-                    output.value.slice(0, output.pointer - 1) +
-                    output.value.slice(output.pointer),
-                pointer: output.pointer - 1,
-            };
+            if (output.pointer > 0) {
+                return {
+                    value:
+                        output.value.slice(0, output.pointer - 1) +
+                        output.value.slice(output.pointer),
+                    pointer: output.pointer - 1,
+                };
+            } else {
+                return output;
+            }
+
         case "<<":
             return {
                 ...output,
