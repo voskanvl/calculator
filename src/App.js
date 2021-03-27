@@ -2,7 +2,9 @@
 
 import "./App.scss";
 import DigitButton from "./components/digitButton";
-import { useState, useRef, useEffect } from "react";
+import Output from "./components/output";
+import { useReducer } from "react";
+import { insert } from "./insert";
 
 const digitLabels = [];
 const digits = new Array(10).fill(null).map((_, i) => i);
@@ -10,80 +12,51 @@ digits.push(".");
 digitLabels.push(...digits);
 const operators = ["+", "-", "*", "/", "(", ")"];
 digitLabels.push(...operators);
-const controls = ["<", "<-", ">", "C"];
+const controls = ["<<", "<", "<-", ">", ">>", "C"];
 digitLabels.push(...controls);
 
 const App = () => {
-    const [output, setOutput] = useState("");
-    const inp = useRef(null);
+    const initialOutput = { value: "", pointer: 0 };
 
-    useEffect(() => inp.current.focus(), []);
+    function reducer(output, action) {
+        switch (action.value) {
+            case "<":
+                if (output.pointer > 0) {
+                    return {
+                        ...output,
+                        pointer: output.pointer - 1,
+                    };
+                } else {
+                    return {
+                        ...output,
+                        pointer: 0,
+                    };
+                }
+            case ">":
+                if (output.pointer < output.value.length) {
+                    return {
+                        ...output,
+                        pointer: output.pointer + 1,
+                    };
+                } else {
+                    return {
+                        ...output,
+                        pointer: output.value.length,
+                    };
+                }
+            case "<-":
+                return output;
 
-    const validKey = char => {
-        const regexp = /[^\d|.|*|/|+|\-|(|)]/;
-        return !regexp.test(char);
-    };
-
-    const handlerReducer = x => {
-        const currentPosition = inp.current.selectionStart;
-        const divide = output.slice(currentPosition);
-
-        if (x === "C") {
-            setOutput("");
-            return;
+            default:
+                break;
         }
-        if (controls.includes(x)) {
-            switch (x) {
-                case "<":
-                    inp.current.selectionStart = inp.current.selectionEnd =
-                        currentPosition - 1;
-                    inp.current.focus();
-                    break;
-                case ">":
-                    inp.current.selectionStart = inp.current.selectionEnd =
-                        currentPosition + 1;
-                    inp.current.focus();
-                    break;
-                case "<-":
-                    if (currentPosition > 0) {
-                        setOutput(
-                            output.slice(0, currentPosition - 1) + divide,
-                        );
-                        inp.current.focus();
-                        setTimeout(() => {
-                            inp.current.selectionStart = inp.current.selectionEnd =
-                                currentPosition - 1;
-                        });
-                    }
-                    break;
+        return {
+            value: insert(action.value, output),
+            pointer: output.pointer + 1,
+        };
+    }
 
-                default:
-                    break;
-            }
-            return;
-        }
-
-        setOutput(output.slice(0, currentPosition) + x + divide);
-        inp.current.focus();
-        setTimeout(() => {
-            inp.current.selectionStart = inp.current.selectionEnd =
-                currentPosition + 1;
-        });
-    };
-
-    const handleInput = ({ target: { value } }) => {
-        if (validKey(value)) setOutput(value);
-    };
-
-    const postSet = () => {
-        let result = 0;
-        try {
-            result = eval(output);
-            return result;
-        } catch (error) {
-            return <span style={{ color: "#f77a" }}>Error</span>;
-        }
-    };
+    const [output, dispatch] = useReducer(reducer, initialOutput);
 
     const distributeDigitLabels = digitLabels.map(e => {
         let color = digits.includes(e) ? "black" : "red";
@@ -93,7 +66,7 @@ const App = () => {
             <DigitButton
                 color={color}
                 label={e}
-                cb={handlerReducer}
+                cb={x => dispatch({ value: x })}
                 key={"i" + e}
             />
         );
@@ -103,17 +76,7 @@ const App = () => {
     return (
         <div className="main">
             <div className="wrap-output">
-                <div className="output">
-                    <input
-                        ref={inp}
-                        type="text"
-                        placeholder="0"
-                        onInput={handleInput}
-                        value={output}
-                        onBlur={() => inp.current.focus()}
-                    />
-                    <div className="equal">={postSet()}</div>
-                </div>
+                <Output output={output} />
             </div>
             <div className="container">
                 <div className="controls">
@@ -138,5 +101,5 @@ const App = () => {
 
 export default App;
 
-//TODO: добавить кнопки перемещения по инпуту: вперед, назад, удалить
 //TODO: при использовании на мобильном вылезает клавиатура при фокусе на инпуте и закрывает цифры
+//TODO: доделать управляющие сигналы

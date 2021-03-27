@@ -69,7 +69,7 @@ body {
         color: #eee;
         margin: 0.5rem;
     }
-    & > input {
+    & > .input {
         width: 100%;
         line-height: 1;
         font-size: 90px;
@@ -79,6 +79,8 @@ body {
         box-sizing: border-box;
         padding: 0.5rem;
         color: #ccc;
+        overflow: auto;
+        white-space: nowrap;
         background-color: transparent;
     }
 }
@@ -110,5 +112,23 @@ body {
     }
     to {
         transform: rotate(360deg);
+    }
+}
+.pointer {
+    opacity: 0;
+    font-weight: 100;
+    text-shadow: 0px 0px 5px white;
+    vertical-align: 9%;
+    animation: blink 1.5s infinite;
+}
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 100%;
+    }
+    100% {
+        opacity: 0;
     }
 }
