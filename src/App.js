@@ -4,7 +4,7 @@ import "./App.scss";
 import DigitButton from "./components/digitButton";
 import Output from "./components/output";
 import { useReducer } from "react";
-import { insert } from "./insert";
+import { reducer } from "./reducer";
 
 const digitLabels = [];
 const digits = new Array(10).fill(null).map((_, i) => i);
@@ -17,44 +17,6 @@ digitLabels.push(...controls);
 
 const App = () => {
     const initialOutput = { value: "", pointer: 0 };
-
-    function reducer(output, action) {
-        switch (action.value) {
-            case "<":
-                if (output.pointer > 0) {
-                    return {
-                        ...output,
-                        pointer: output.pointer - 1,
-                    };
-                } else {
-                    return {
-                        ...output,
-                        pointer: 0,
-                    };
-                }
-            case ">":
-                if (output.pointer < output.value.length) {
-                    return {
-                        ...output,
-                        pointer: output.pointer + 1,
-                    };
-                } else {
-                    return {
-                        ...output,
-                        pointer: output.value.length,
-                    };
-                }
-            case "<-":
-                return output;
-
-            default:
-                break;
-        }
-        return {
-            value: insert(action.value, output),
-            pointer: output.pointer + 1,
-        };
-    }
 
     const [output, dispatch] = useReducer(reducer, initialOutput);
 
