@@ -1,0 +1,48 @@
+/** @format */
+
+.circle {
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(-45deg, #444, #ddd, #444);
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 2px 2px 8px black, -2px -2px 8px white;
+    & > .sign {
+        position: absolute;
+        left: 50%;
+        top: 5%;
+        transform: translate(-50%, -5%);
+        font-size: 1rem;
+    }
+    & > .container {
+        background-color: #fff;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        & > .switch {
+            width: 75px;
+            height: 25px;
+            background-color: #000;
+            border-radius: 20%;
+            position: relative;
+            transition: transform 1s;
+            box-shadow: 2px 2px 8px black;
+            &::before {
+                content: "";
+                width: 15px;
+                height: 2px;
+                background-color: #fff;
+                position: absolute;
+                top: 11px;
+                left: 0;
+            }
+        }
+    }
+}
