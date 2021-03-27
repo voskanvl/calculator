@@ -1,6 +1,6 @@
 /** @format */
 
-import { insert } from "../insert";
+import { useRef, useEffect } from "react";
 
 const Output = ({ output }) => {
     // const inp = useRef(null);
@@ -8,16 +8,11 @@ const Output = ({ output }) => {
     let { value, pointer } = output;
     const right = value.slice(0, pointer);
     const left = value.slice(pointer);
-    console.log("🚀 ~ output", output, right, left);
+    const caret = useRef(null);
 
-    const renderValue = (
-        <div>
-            {right}
-            <span className="pointer">|</span>
-            {left}
-        </div>
-    );
-    console.log("🚀 ~ renderValue", renderValue);
+    useEffect(() => {
+        caret.current.scrollIntoView({ block: "center", behavior: "smooth" });
+    }, [pointer]);
 
     const postSet = () => {
         let result = 0;
@@ -30,16 +25,13 @@ const Output = ({ output }) => {
     };
     return (
         <div className="output">
-            {/* <input
-                className="input"
-                ref={inp}
-                type="text"
-                placeholder="0"
-                onInput={event => input({ event, inp: inp.current })}
-                value={value}
-                onBlur={() => inp.current.focus()}
-            /> */}
-            <div className="input">{renderValue}</div>
+            <div className="input">
+                {right}
+                <span className="pointer" ref={caret}>
+                    |
+                </span>
+                {left}
+            </div>
             <div className="equal">={postSet()}</div>
         </div>
     );
@@ -48,4 +40,3 @@ const Output = ({ output }) => {
 export default Output;
 
 //TODO: перенести стиль из Апп сюда
-//TODO: инпут должен автоматически скролиться при введении новых символов

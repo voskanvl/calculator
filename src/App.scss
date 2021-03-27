@@ -62,24 +62,24 @@ body {
     transform: translateX(-50%);
     border-radius: 0.5rem;
     overflow: scroll;
-    & > .equal {
-        text-align: right;
-        line-height: 1;
-        font-size: 100px;
-        color: #eee;
-        margin: 0.5rem;
-    }
-    & > .input {
+    & > div {
         width: 100%;
         line-height: 1;
-        font-size: 90px;
+        overflow: auto;
         margin: 0.5rem;
+        padding: 0.5rem;
+    }
+    & > .equal {
+        text-align: right;
+        font-size: 100px;
+        color: #eee;
+    }
+    & > .input {
+        font-size: 90px;
         border: none;
         outline: none;
         box-sizing: border-box;
-        padding: 0.5rem;
         color: #ccc;
-        overflow: auto;
         white-space: nowrap;
         background-color: transparent;
     }
