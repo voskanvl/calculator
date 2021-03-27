@@ -10,12 +10,32 @@
     & > .sign {
         position: absolute;
         left: 50%;
-        top: 5%;
+        top: 2%;
+        height: 0.8rem;
+        width: 1rem;
         transform: translate(-50%, -5%);
-        font-size: 1rem;
+        font-size: 0.7rem;
+        padding: 3px;
+        background-color: #eee;
+        border: 1px solid #333;
+        border-radius: 10%;
+        box-shadow: inset 2px 2px 3px black;
+        transition: 1s;
+        overflow: hidden;
+        & > strong {
+            position: absolute;
+            left: -2rem;
+            transform: translateX(-50%);
+            transition: left 1s ease-in;
+            & > [data-key] {
+                margin: 0 3px;
+                padding: 0 6px;
+                border-left: 1px solid #777;
+            }
+        }
     }
     & > .container {
-        background-color: #fff;
+        background: linear-gradient(-45deg, #444, #ddd);
         width: 100px;
         height: 100px;
         border-radius: 50%;
@@ -44,5 +64,13 @@
                 left: 0;
             }
         }
+    }
+}
+@keyframes slide {
+    0% {
+        left: 0;
+    }
+    100% {
+        left: 50%;
     }
 }

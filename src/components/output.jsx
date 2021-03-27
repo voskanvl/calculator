@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 
-const Output = ({ output }) => {
+const Output = ({ output, fixed = 0 }) => {
     // const inp = useRef(null);
     // useEffect(() => inp.current.focus(), []);
     let { value, pointer } = output;
@@ -14,13 +14,24 @@ const Output = ({ output }) => {
         caret.current.scrollIntoView({ block: "center", behavior: "smooth" });
     }, [pointer]);
 
+    const equalsModes = [
+        { func: "toFixed", arg: 0 },
+        { func: "toFixed", arg: 2 },
+        { func: "toFixed", arg: 4 },
+        { func: "toExponential", arg: 2 },
+        { func: "toExponential", arg: 4 },
+    ];
+
     const postSet = () => {
         let result = 0;
         try {
             result = eval(value);
-            return result;
+            return Number.prototype[equalsModes[fixed].func].call(
+                result || 0,
+                equalsModes[fixed].arg,
+            );
         } catch (error) {
-            return <span style={{ color: "#f77a" }}>Error</span>;
+            return <span style={{ color: "#f77a" }}>E</span>;
         }
     };
     return (
@@ -40,3 +51,4 @@ const Output = ({ output }) => {
 export default Output;
 
 //TODO: перенести стиль из Апп сюда
+//TODO toFixed(?) equal

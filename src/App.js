@@ -2,8 +2,9 @@
 
 import "./App.scss";
 import DigitButton from "./components/digitButton";
+import Switcher from "./components/switcher";
 import Output from "./components/output";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { reducer } from "./reducer";
 
 const digitLabels = [];
@@ -16,9 +17,8 @@ const controls = ["<<", "<", "<-", ">", ">>", "C"];
 digitLabels.push(...controls);
 
 const App = () => {
-    const initialOutput = { value: "", pointer: 0 };
-
-    const [output, dispatch] = useReducer(reducer, initialOutput);
+    const [output, dispatch] = useReducer(reducer, { value: "", pointer: 0 });
+    const [fixed, setfixed] = useState(0);
 
     const distributeDigitLabels = digitLabels.map(e => {
         let color = digits.includes(e) ? "black" : "red";
@@ -36,15 +36,21 @@ const App = () => {
     });
 
     return (
-        <div className="main">
+        <div
+            className="main"
+            onSelect={e => {
+                e.preventDefault();
+                console.log("select");
+            }}>
             <div className="wrap-output">
-                <Output output={output} />
+                <Output output={output} fixed={fixed} />
             </div>
             <div className="container">
                 <div className="controls">
                     {distributeDigitLabels.filter(({ props: { label } }) =>
                         controls.includes(label),
                     )}
+                    <Switcher sw={x => setfixed(x)} />
                 </div>
                 <div className="digits">
                     {distributeDigitLabels.filter(({ props: { label } }) =>
