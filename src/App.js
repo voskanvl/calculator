@@ -50,6 +50,8 @@ const App = () => {
                     {distributeDigitLabels.filter(({ props: { label } }) =>
                         controls.includes(label),
                     )}
+                </div>
+                <div className="switch">
                     <Switcher sw={x => setfixed(x)} />
                 </div>
                 <div className="digits">
@@ -69,5 +71,5 @@ const App = () => {
 
 export default App;
 
-//TODO: при использовании на мобильном вылезает клавиатура при фокусе на инпуте и закрывает цифры
-//TODO: доделать управляющие сигналы
+//TODO: блокировать селект
+//TODO изменить стили. Гриды исправить что бы выключатель смотрелся лучше. Панель с числовыми кнопками перенести выше

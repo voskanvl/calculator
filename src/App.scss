@@ -27,7 +27,8 @@ body {
 .container {
     display: grid;
     grid-template-areas:
-        "controls controls controls"
+        "controls controls switch"
+        "digits digits switch"
         "digits digits operators";
     margin-top: 18.5rem;
     margin-left: 0.5rem;
@@ -36,7 +37,7 @@ body {
     & > div {
         flex-wrap: nowrap;
         justify-content: space-between;
-        background-color: #ddd;
+        background: linear-gradient(-45deg, #ddd, #aaa, #ddd);
         padding: 0.5rem;
         align-content: flex-start;
         border-radius: 0.5rem;
@@ -56,13 +57,19 @@ body {
         grid-area: controls;
         display: flex;
     }
+    & > .switch {
+        grid-area: switch;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 .output {
     font-family: "Digital-7";
     top: 0.5rem;
     width: 95vw;
     box-sizing: border-box;
-    background-color: #000;
+    background: linear-gradient(-45deg, #000, #222, #000, #000);
     padding: 0.5rem;
     position: absolute;
     left: 50%;
@@ -88,7 +95,7 @@ body {
         border: none;
         outline: none;
         box-sizing: border-box;
-        color: #ccc;
+        color: #aca;
         white-space: nowrap;
         background-color: transparent;
     }
