@@ -2,7 +2,7 @@
 import { insert } from "./insert";
 export function reducer(output, action) {
     switch (action.value) {
-        case "<":
+        case "◀︎":
             if (output.pointer > 0) {
                 return {
                     ...output,
@@ -14,7 +14,7 @@ export function reducer(output, action) {
                     pointer: 0,
                 };
             }
-        case ">":
+        case "►":
             if (output.pointer < output.value.length) {
                 return {
                     ...output,
@@ -26,7 +26,7 @@ export function reducer(output, action) {
                     pointer: output.value.length,
                 };
             }
-        case "<-":
+        case "⌫":
             if (output.pointer > 0) {
                 return {
                     value:
@@ -38,12 +38,12 @@ export function reducer(output, action) {
                 return output;
             }
 
-        case "<<":
+        case "◀︎◀︎":
             return {
                 ...output,
                 pointer: 0,
             };
-        case ">>":
+        case "►►":
             return {
                 ...output,
                 pointer: output.value.length,

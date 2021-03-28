@@ -13,7 +13,7 @@ digits.push(".");
 digitLabels.push(...digits);
 const operators = ["+", "-", "*", "/", "(", ")"];
 digitLabels.push(...operators);
-const controls = ["<<", "<", "<-", ">", ">>", "C"];
+const controls = ["◀︎◀︎", "◀︎", "⌫", "►", "►►", "C"];
 digitLabels.push(...controls);
 
 const App = () => {
