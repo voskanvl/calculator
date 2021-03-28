@@ -12,7 +12,7 @@ const Output = ({ output, fixed = 0 }) => {
     let right = value.slice(pointer + 1);
     if (pointer === value.length) {
         left = value.slice();
-        current = <span className={styles.pointerRight}>_</span>;
+        current = <div className={styles.pointerRight}>_</div>;
         right = "";
     }
     const caret = useRef(null);
@@ -45,9 +45,9 @@ const Output = ({ output, fixed = 0 }) => {
         <div className={styles.output}>
             <div className={styles.input}>
                 {left}
-                <span className={styles.pointer} ref={caret}>
+                <div className={styles.pointer} ref={caret}>
                     {current}
-                </span>
+                </div>
                 {right}
             </div>
             <div className={styles.equal}>={postSet()}</div>
