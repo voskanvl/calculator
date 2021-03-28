@@ -11,6 +11,11 @@
         cursor: pointer;
         margin: 0 auto;
         box-shadow: 5px 5px 8px #444, -5px -5px 8px #fff;
+        transition: 300ms;
+        &:hover {
+            box-shadow: 3px 3px 6px #444, -3px -3px 6px #fff;
+            transform: scale(0.97);
+        }
         & > div {
             font-size: 30px;
             position: absolute;

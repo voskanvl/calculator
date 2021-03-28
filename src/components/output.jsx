@@ -1,6 +1,7 @@
 /** @format */
 
 import { useRef, useEffect } from "react";
+import styles from "./output.module.scss";
 
 const Output = ({ output, fixed = 0 }) => {
     // const inp = useRef(null);
@@ -11,7 +12,7 @@ const Output = ({ output, fixed = 0 }) => {
     let right = value.slice(pointer + 1);
     if (pointer === value.length) {
         left = value.slice();
-        current = <span className="pointerRight">_</span>;
+        current = <span className={styles.pointerRight}>_</span>;
         right = "";
     }
     const caret = useRef(null);
@@ -41,15 +42,15 @@ const Output = ({ output, fixed = 0 }) => {
         }
     };
     return (
-        <div className="output">
-            <div className="input">
+        <div className={styles.output}>
+            <div className={styles.input}>
                 {left}
-                <span className="pointer" ref={caret}>
+                <span className={styles.pointer} ref={caret}>
                     {current}
                 </span>
                 {right}
             </div>
-            <div className="equal">={postSet()}</div>
+            <div className={styles.equal}>={postSet()}</div>
         </div>
     );
 };
@@ -57,4 +58,3 @@ const Output = ({ output, fixed = 0 }) => {
 export default Output;
 
 //TODO: перенести стиль из Апп сюда
-//TODO toFixed(?) equal
