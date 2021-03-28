@@ -6,8 +6,14 @@ const Output = ({ output, fixed = 0 }) => {
     // const inp = useRef(null);
     // useEffect(() => inp.current.focus(), []);
     let { value, pointer } = output;
-    const right = value.slice(0, pointer);
-    const left = value.slice(pointer);
+    let left = value.slice(0, pointer);
+    let current = value.slice(pointer, pointer + 1);
+    let right = value.slice(pointer + 1);
+    if (pointer === value.length) {
+        left = value.slice();
+        current = <span className="pointerRight">_</span>;
+        right = "";
+    }
     const caret = useRef(null);
 
     useEffect(() => {
@@ -37,11 +43,11 @@ const Output = ({ output, fixed = 0 }) => {
     return (
         <div className="output">
             <div className="input">
-                {right}
-                <span className="pointer" ref={caret}>
-                    |
-                </span>
                 {left}
+                <span className="pointer" ref={caret}>
+                    {current}
+                </span>
+                {right}
             </div>
             <div className="equal">={postSet()}</div>
         </div>
