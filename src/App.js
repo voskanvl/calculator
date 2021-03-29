@@ -35,6 +35,11 @@ const App = () => {
         return element;
     });
 
+    const handleSw = x => {
+        localStorage.setItem("turn", x);
+        setfixed(x);
+    };
+
     return (
         <div
             className="main"
@@ -52,7 +57,7 @@ const App = () => {
                     )}
                 </div>
                 <div className="switch">
-                    <Switcher sw={x => setfixed(x)} />
+                    <Switcher sw={handleSw} />
                 </div>
                 <div className="digits">
                     {distributeDigitLabels.filter(({ props: { label } }) =>

@@ -3,7 +3,7 @@ import styles from "./switcher.module.scss";
 import { useState, useEffect } from "react";
 
 const Switcher = ({ sw }) => {
-    const [turn, setTurn] = useState(0);
+    const [turn, setTurn] = useState(localStorage.getItem("turn") ?? 0);
     useEffect(() => {
         sw(turn);
     }, [turn, sw]);
