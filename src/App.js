@@ -45,7 +45,6 @@ const App = () => {
             className="main"
             onSelect={e => {
                 e.preventDefault();
-                console.log("select");
             }}>
             <div className="wrap-output">
                 <Output output={output} fixed={fixed} />
@@ -57,7 +56,7 @@ const App = () => {
                     )}
                 </div>
                 <div className="switch">
-                    <Switcher sw={handleSw} />
+                    <Switcher modeValue={5} sw={handleSw} />
                 </div>
                 <div className="digits">
                     {distributeDigitLabels.filter(({ props: { label } }) =>

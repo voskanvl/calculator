@@ -2,14 +2,16 @@
 import styles from "./switcher.module.scss";
 import { useState, useEffect } from "react";
 
-const Switcher = ({ sw }) => {
-    const [turn, setTurn] = useState(localStorage.getItem("turn") ?? 0);
+const Switcher = ({ sw, modeValue = 5 }) => {
+    const initialTurn = localStorage.getItem("turn");
+    const [turn, setTurn] = useState(parseInt(initialTurn) ?? 0);
+
     useEffect(() => {
         sw(turn);
     }, [turn, sw]);
 
     const handle = () => {
-        setTurn((turn + 1) % 5);
+        setTurn((turn + 1) % modeValue);
     };
 
     return (
@@ -17,7 +19,7 @@ const Switcher = ({ sw }) => {
             <div className={styles.circle} onClick={handle}>
                 <div className={styles.sign}>
                     <strong style={{ left: `${(turn - 1) * 27 - 15}px` }}>
-                        {new Array(5)
+                        {new Array(modeValue)
                             .fill(null)
                             .map((_, i) => (
                                 <span key={i} data-key={i}>
