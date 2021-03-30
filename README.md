@@ -2,7 +2,7 @@
 
 ##just simple calculator
 
-the app was hosted on [https://https://calculator-e5303.web.app/](https://https://calculator-e5303.web.app)
+the app was hosted on [https://calculator-e5303.web.app/](https://calculator-e5303.web.app)
 
 ##modes of switcher
 
